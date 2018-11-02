@@ -1,0 +1,12 @@
+extends layout
+
+block content
+	div.container
+	div.row
+	div.col-lg-10
+	h1= title
+	p Clarity API Template
+	each value, key in data
+		h4=key
+		p=value
+	#{data.locationName}

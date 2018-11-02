@@ -1,0 +1,109 @@
+link(rel='stylesheet', href='#{location.font}')
+link(rel='stylesheet', href='#{location.css}')
+script(type='text/javascript', src='#{location.jq}')
+script(type='text/javascript', src='#{location.hc}')
+div( style='background-color:#2E3641; padding: 20px')
+	img( src='#{location.logo}', width='120' )
+br
+div( style='margin-bottom: 50px, font-size: 12px' )
+	div( style='float: left' )
+		div
+			b
+				| Client:
+			= ' ' + location.organization
+		div
+			b
+				| Location:
+			= ' ' + location.name
+		div
+			b
+				| Asset:
+			= ' ' + location.eq
+	div( style='float: right' )
+		div
+			= 'From: ' + location.from
+		div
+			= 'To: ' + location.to
+div#container(style="width: 500px; height: 350px; margin: 0 auto")
+div
+	div( style='margin-top: 40px' )
+		div( style='margin-bottom: 20px; margin-top: 20px' )
+			b.
+				Notes
+		for comment in location.comments
+			= comment.date
+			p
+				= comment.text
+		else
+			| No comments for this location
+script.
+	$(function () {
+			var series = !{JSON.stringify(location.series)};
+			var colors = ['#346BA7', '#009387', '#EC5E64', '#F37649', '#A8BC58', '#00B9D1', '#C253CE'];
+
+			$('#container').highcharts({
+				title: {
+					text: ''
+				},
+				chart: {
+					animation: false
+				},
+				plotOptions: {
+					series: {
+						animation: false,
+						lineWidth: 1
+					}
+				},
+				legend: {
+					itemStyle: {
+						fontSize: '10px'
+					}
+				},
+				plotBackgroundColor: '#E0E0E0',
+				colors: colors,
+				xAxis: {
+					type: 'datetime',
+					alternateGridColor: 'WhiteSmoke',
+					labels: {
+						fontSize: '10px'
+					},
+					dateTimeLabelFormats: {
+						millisecond: '%b %Y',
+						second: '%b %Y',
+						minute: '%b %Y',
+						hour: '%b %Y',
+						week: '%b %Y',
+						month: '%b %Y',
+						year: '%b %Y',
+						day: '%b %Y'
+					}
+				},
+				yAxis: {
+					gridLineWidth: 0,
+					labels: {
+						fontSize: '10px'
+					},
+					plotLines: [{
+						color: '#000000',
+						dashStyle: 'Dash',
+						value: 0,
+						width: 1
+					}, {
+						color: '#000000',
+						value: 1,
+						width: 1
+					}, {
+						color: '#ACACAC',
+						value: -1,
+						width: 1
+					}],
+					title: {
+						text: ''
+					}
+				},
+				credits: {
+					enabled: false
+				},
+				series: series
+			});
+	})();

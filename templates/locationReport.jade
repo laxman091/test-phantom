@@ -1,0 +1,740 @@
+link(rel='stylesheet', href='#{location.font}')
+link(rel='stylesheet', href='#{location.css}')
+script(type='text/javascript', src='#{location.jq}')
+script(type='text/javascript', src='#{location.hc}')
+- var pageCount = 2
+- var extraPages = Math.floor(location.assets.length / 12)
+- var staticPages = 3 + extraPages
+- var acum = staticPages +  2
+- var reportTotal = location.totalPages + extraPages;
+div( class='main-logo' )
+	img( src='#{location.logo}' )
+div( class='main-img' )
+	img( src='#{location.firstPage}' )
+div(class='main-footer' )
+	div( class='main-bg')
+		div(class='main-title')
+			| Water Treatment Review Report
+		div(class='organization-name')
+			= location.organization
+		div(class='location-name')
+			= location.name
+		div(class='main-dates')
+			= location.from + ' - ' + location.to
+		div(class='issued')
+			= 'Issued ' + location.issued
+	div(class='over')
+		| Over 35 years of excellence
+	div(class='phone')
+		| 1300 558 788
+		span(class='phone-spacing')
+		| hydrochem.com.au
+div(class='page-break')
+div( class='page' )
+	div( class='page-logo' )
+		img( src='#{location.logo}' )
+	div( class='first-title' )
+		div
+			div( class='organization' )
+				= location.organization
+			div(class='title-location')
+				= location.name
+			div( class='title-dates' )
+				= location.from + ' - ' + location.to
+	div(class='table-contents-heading')
+		| Table Of Contents
+	table(class='table-contents')
+		tr
+			td(class='cont-title') 1. Location Perfomance Summary
+			td(class='cont-page') 
+				= staticPages
+		tr
+			td(class='cont-sub') Asset Health
+			td(class='cont-page') 
+				= staticPages
+		tr
+			td(class='cont-sub') Environment Health
+			td(class='cont-page') 
+				= staticPages + 1
+		tr
+			td(class='cont-sub') Water Efficiency
+			td(class='cont-page') 
+				= staticPages + 1
+		tr
+			td(class='cont-sub') Compliance
+			td(class='cont-page')
+				= staticPages + 1
+		tr
+			td(class='cont-title') 2. Exception Report
+			td(class='cont-page')
+				= staticPages + 2
+		- acum += location.excPages
+		- var i = 0
+		while i < 12 && i != location.assets.length
+			tr
+				td(class='cont-title')
+					= (i + staticPages) + '. ' + location.assets[i].description
+				td(class='cont-page')
+					= acum
+					- acum += location.assets[i].pages
+					- i++
+		if  i === location.assets.length
+			tr
+				td(class='cont-title')
+					= (location.assets.length + staticPages) + '. Report Notes'
+				td(class='cont-page')
+					= acum
+	div(class='page-footer')
+		div(class='foo-left')
+			| Water treatment review
+		div(class='foo-middle')
+			= 'Issued ' + location.issued
+		div(class='foo-right')
+			= 'Page ' + pageCount + ' of ' + reportTotal
+div(class='page-break')
+- pageCount++
+if location.assets.length > 12
+	div(class='page')
+		div(class='page-logo')
+			img( src='#{location.logo}' )
+		div( class='page-organization' )
+			div
+				div(class='page-org')
+					= location.organization
+				div
+					= location.name
+				div
+					= location.from + ' - ' + location.to
+		div( class='first-title' )
+		table(class='table-contents')
+			- var i = 12
+			while i < location.assets.length
+				tr
+					td(class='cont-title')
+						= (i + staticPages) + '. ' + location.assets[i].description
+					td(class='cont-page')
+						= acum
+						- acum += location.assets[i].pages
+						- i++
+			if  i === location.assets.length					
+				tr
+					td(class='cont-title')
+						= (location.assets.length + staticPages) + '. Report Notes'
+					td(class='cont-page')
+						= acum
+		div(class='page-footer')
+			div(class='foo-left')
+				| Water treatment review
+			div(class='foo-middle')
+				= 'Issued ' + location.issued
+			div(class='foo-right')
+				= 'Page ' + pageCount + ' of ' + reportTotal
+	div(class='page-break')
+	- pageCount++
+div(class='page')
+	div(class='page-logo')
+		img( src='#{location.logo}' )
+	div( class='page-organization' )
+		div
+			div(class='page-org')
+				= location.organization
+			div
+				= location.name
+			div
+				= location.from + ' - ' + location.to
+	div()
+		div(class='asset-name')
+			| 1. LOCATION PERFORMANCE SUMMARY
+		p
+			| Hydrochem is busy servicing your water systems to minimise risks to human health and maximise asset performance and longevity - this is how we reduce your total cost of operation. as part of our service, we collect data across a range of categories to assess how your systems are performing.
+		p
+			= 'The Health Score algorithm for your location over the period ' + location.from + ' to ' + location.to + ' has condensed ' + location.stats.dataPointsCount + ' data points across ' + location.assetsCount + ' systems down to 4 categories that indicate an overall location health of ' + location.stats.parsedTotal + ' %.'
+		p
+			= 'This health score indicates your Location is in ' + location.message + ' health.'
+		p
+			|The health score is responsive to the data accumulated during the period. as you would appreciate, water systems are relatively dynamic and we should continue to work together to maintain this rating.
+	div(class='location-donut-container')
+		div(class='location-health')
+			| Location Health
+		div(class='radial-progress', data-progress='#{location.stats.parsedTotal}')
+			div(class='radial-progress__circle')
+				div(class='radial-progress__mask radial-progress__mask--full')
+					div(class='radial-progress__fill')
+				div(class='radial-progress__mask radial-progress__mask--half')
+					div(class='radial-progress__fill')
+					div(class='radial-progress__fill radial-progress__fill--fix')
+			div(class='radial-progress__inset')
+				span
+					= location.stats.parsedTotal
+					sup %
+		div(class='location-detail')
+			b
+				= 'Your location score of ' + location.stats.parsedTotal
+			= ' is based on results collected during the period '
+			b
+				= location.from + ' to ' + location.to
+	div(class='location-cards')
+		div(class='card')
+			- var p = location.stats.assetHealth.percentage
+			div(class='card-asset-health')
+				= p != -1 ? p + '/' : 'No Data'
+				if p != -1
+					span 100
+				div(class='card-name') Asset Health
+
+			div(class='card-detail')
+				div 5-100 EXCELLENT
+				div 65-84 GOOD
+				div 0-64 FOCUS ON IMPROVEMENT
+		div(class='card')
+			- var p = location.stats.environmentHealthRating.percentage
+			div(class='card-environ-health')
+				= p != -1 ? p + '/' : 'No Data'
+				if p != -1
+					span 100
+				div(class='card-name') Environment Health
+			div(class='card-detail')
+				div 85-100 EXCELLENT
+				div 65-84 GOOD
+				div 0-64 FOCUS ON IMPROVEMENT
+		div(class='card')
+			- var p = location.stats.energy.percentage
+			div(class='card-energy')
+				= p != -1 ? p + '/' : 'No Data'
+				if p != -1
+					span 100
+				div(class='card-name') Water Efficiency
+			div(class='card-detail')
+				div 85-100 EXCELLENT
+				div 65-84 GOOD
+				div 0-64 FOCUS ON IMPROVEMENT
+		div(class='card')
+			- var p = location.stats.compilanceRating.percentage
+			div(class='card-compilance')
+				= p != -1 ? p + '/' : 'No Data'
+				if p != -1
+					span 100
+				div(class='card-name') Compliance Rating
+			div(class='card-detail')
+				div 85-100 EXCELLENT
+				div 65-84 GOOD
+				div 0-64 FOCUS ON IMPROVEMENT
+	div
+		if location.stats.assetHealth.percentage != -1
+			div(class='asset-health')
+				= 'Asset Health - ' + location.stats.assetHealth.percentage + '/100'
+			p
+				| The Asset Health score is targeted towards maximising asset performance and longevity. The score is calculated on an accumulation of data across the Location including:
+			ul(class='list')
+				li
+					| On-site water chemistry analyses undertaken during service visits
+				li
+					| Corrosion coupon results
+			p
+				b
+					= 'Your Location score of ' + location.stats.assetHealth.percentage + ' '
+				| is based on results collected during the period
+				b
+					= ' ' + location.from + ' to ' + location.to
+			p
+				b
+					| Water Chemistry Analyses:
+				= ' ' + location.stats.assetHealth.waterAnalisys + ' on-site water chemistry analyses were undertaken during this period, of which ' + location.stats.assetHealth.waterOutOfSpec + ' were out of specification.'
+			p
+				b
+					| Corrosion Coupons:
+				= ' ' + location.stats.assetHealth.coupons + ' corrosion coupon results were recorded during this period, of which ' + location.stats.assetHealth.highCoupons + ' were in the moderate to fair corrosion rate category or higher.'
+	div(class='page-footer')
+		div(class='foo-left')
+			| Water treatment review
+		div(class='foo-middle')
+			= 'Issued ' + location.issued
+		div(class='foo-right')
+			= 'Page ' + pageCount + ' of ' + reportTotal
+div(class='page-break')
+- pageCount++
+div( class='page')
+	div( class='page-logo')
+		img( src='#{location.logo}' )
+	div(class='page-organization')
+		div()
+			div(class='page-org')
+				= location.organization
+			div
+				= location.name
+			div
+				= location.from + ' - ' + location.to
+	div
+		if location.stats.environmentHealthRating.percentage != -1
+			div(class='environmental-health')
+				= 'Environment Health - ' + location.stats.environmentHealthRating.percentage + '/100'
+			p
+				| The Environmental Health score is targeted towards minimising incidents that could cause harm to human or environmental health, including Legionnaires disease.
+			p
+				b
+					= 'Your Location score of ' + location.stats.environmentHealthRating.percentage
+				= ' is based on a total of ' + location.stats.environmentHealthRating.legs + ' Legionella tests and ' + location.stats.environmentHealthRating.hcc + ' HCC carried out over the period '
+				b
+					= location.from + ' to ' + location.to + '. '
+				= 'Your system/s recorded ' + location.stats.environmentHealthRating.highLegs + ' out of specification Legionella results and ' + location.stats.environmentHealthRating.highHcc + ' out of specification HCC results during this period. '
+	div
+		if location.stats.energy.percentage != -1
+			div(class='water-efficiency')
+				= 'Water Efficiency - ' + location.stats.energy.percentage + '/100'
+			p
+				| The Energy Efficiency score is targeted towards maximising the water and energy efficiency of your Location. The score is calculated on a ratio of your system’s dissolved solids concentrations compared to average mains water dissolved solids concentrations in your region. Your system’s dissolved solids analyses are undertaken during HydroChem’s service visits.
+			p
+				b
+					= 'Your location score of ' + location.stats.energy.percentage
+				= ' is based on ' + location.stats.energy.test + ' dissolved solid analyses carried out over the period '
+				b
+					= location.from + ' to ' + location.to + '. '
+				= 'Your location returned ' + location.stats.energy.counting + ' low cycles results during this period. '
+			p
+				| Please note that this calculation relies on the average mains water dissolved solids concentrations in your region. Varia- tions in the actual dissolved solids concentration of incoming mains water (especially any increases) will cause factor variations in the score. Please contact your account manager for further information.
+	div
+		if location.stats.compilanceRating.percentage != -1
+			div(class='compliance')
+				= 'Compliance - ' + location.stats.compilanceRating.percentage + '/100'
+			p
+				| The Compliance score is targeted towards achieving the expected frequency of deliverables associated with Hydro- Chem’s forecast service program. The deliverables encompassed include technical services, inspections, microbiological samples, corrosion coupons and cleans.
+			p
+				b
+					= 'You location score of ' + location.stats.compilanceRating.percentage
+				= ' is based on a total of ' + location.stats.compilanceRating.test + ' contracted deliverables carried out over the period '
+				b
+					= location.from + ' to ' + location.to + '. '
+				= 'HydroChem records indicate that ' + location.stats.compilanceRating.outFrecuency + ' deliverable/s was/were outside the forecast program.'
+			p
+				| This score is intended as an indicative rather than a Pass/Fail. HydroChem programs its forecast at the beginning of the contract period. There can be a variety of reasons for deliverables being outside the forecast frequency (for example: access issues, rescheduling to accommodate client request, inclement weather and public holidays).
+	div(class='page-footer')
+		div(class='foo-left')
+			| Water treatment review
+		div(class='foo-middle')
+			= 'Issued ' + location.issued
+		div(class='foo-right')
+			= 'Page ' + pageCount + ' of ' + reportTotal
+div(class='page-break')
+- pageCount++
+if location.exceptionsList.length == 0
+	div( class='page')
+		div( class='page-logo')
+			img( src='#{location.logo}' )
+		div(class='page-organization')
+			div()
+				div(class='page-org')
+					= location.organization
+				div
+					= location.name
+				div
+					= location.from + ' - ' + location.to
+		div(class='asset-name')
+			| 2. EXCEPTION REPORT
+		div(class='greenMessage')
+			| HydroChem has not recorded any exceptions for the date period.
+		div(class='page-footer')
+			div(class='foo-left')
+				| Water treatment review
+			div(class='foo-middle')
+				= 'Issued ' + location.issued
+			div(class='foo-right')
+				= 'Page ' + pageCount + ' of ' + reportTotal
+	div(class='page-break')
+	- pageCount++
+- var e = 0
+- var ei = 0
+while e < location.excPages
+	div( class='page')
+		div( class='page-logo')
+			img( src='#{location.logo}' )
+		div(class='page-organization')
+			div()
+				div(class='page-org')
+					= location.organization
+				div
+					= location.name
+				div
+					= location.from + ' - ' + location.to
+		if e === 0
+			div(class='asset-name')
+				| 2. EXCEPTION REPORT
+		table(class='table')
+			thead
+				th Type
+				th System Name
+				th Service Call
+				th Date
+				th Comments
+			- var i = 0
+			- var it = i+ei;
+			while i < 12 && it < location.exceptionsList.length
+				- var exc = location.exceptionsList[it]
+				tr
+					if exc.h
+						th(style='text-align: left;', class='crimson', colspan='5')= exc.h
+					if !exc.h
+						td= exc.t
+						td= exc.s
+						td= exc.i
+						td= exc.d
+						td= exc.c
+				- i++;
+				- it = i+ei;
+			- ei = it;						
+		div(class='page-footer')
+			div(class='foo-left')
+				| Water treatment review
+			div(class='foo-middle')
+				= 'Issued ' + location.issued
+			div(class='foo-right')
+				= 'Page ' + pageCount + ' of ' + reportTotal
+	div(class='page-break')
+	- pageCount++
+	- e++
+for asset, asIndex in location.assets
+	div( class='page')
+		div( class='page-logo')
+			img( src='#{location.logo}' )
+		div(class='page-organization')
+			div()
+				div(class='page-org')
+					= location.organization
+				div
+					= location.name
+				div
+					= location.from + ' - ' + location.to
+		div(class='asset-name')
+			= (asIndex+staticPages) + '. ' + asset.description
+		div(class='subtitle') Water Chemistry Parameters
+		div(id='container' + asIndex, style="width: 500px; height: 350px; margin: 0 auto")
+		div(class='page-footer')
+			div(class='foo-left')
+				| Water treatment review
+			div(class='foo-middle')
+				= 'Issued ' + location.issued
+			div(class='foo-right')
+				= 'Page ' + pageCount + ' of ' + reportTotal
+	div(class='page-break')
+	- pageCount++
+	if asset.micro.leg.length > 0
+		- var legPages = asset.micro.leg.length > 0 ? Math.ceil(asset.micro.leg.length/20) : 0;
+		- var h = 0;
+		- var j = 0;
+		while h < legPages
+			div(class='page')
+				div(class='page-logo')
+					img( src='#{location.logo}' )
+				div( class='page-organization' )
+					div
+						div(class='page-org')
+							= location.organization
+						div
+							= location.name
+						div
+							= location.from + ' - ' + location.to
+				if h === 0
+					div( class='subtitle' )
+						| Legionella Species Report:
+				table(class='table blue')
+					thead
+						tr
+							th Date
+							th Service Call ID
+							th Result (CFU/mL)
+							th Acceptable
+					tbody
+						- var i = 0
+						- var ij = i+j;
+						while i < 20 && ij < asset.micro.leg.length
+							- var re = asset.micro.leg[ij];
+							tr
+								td
+									span #{re.date}
+								td
+									span #{re.scid}
+								td(style='text-align: right;width: 20%;')
+									span #{re.result}
+								td(style='width: 15%;')
+									span #{re.acceptable}
+							- i++;
+							- ij = i+j;
+						- j = ij;
+				div(class='page-footer')
+					div(class='foo-left')
+						| Water treatment review
+					div(class='foo-middle')
+						= 'Issued ' + location.issued
+					div(class='foo-right')
+						= 'Page ' + pageCount + ' of ' + reportTotal						
+			div(class='page-break')
+			- pageCount++;
+			- h++;
+	if asset.micro.hcc.length > 0
+		- var hccPages = asset.micro.hcc.length > 0 ? Math.ceil(asset.micro.hcc.length/20) : 0;
+		- var h = 0;
+		- var j = 0;
+		while h < hccPages
+			div(class='page')
+				div(class='page-logo')
+					img( src='#{location.logo}' )
+				div( class='page-organization' )
+					div
+						div(class='page-org')
+							= location.organization
+						div
+							= location.name
+						div
+							= location.from + ' - ' + location.to
+				if h === 0
+					div( class='subtitle' )
+						| Heterotrophic Colony Count Report:
+				table(class='table blue')
+					thead
+						tr
+							th Date
+							th Service Call ID
+							th Result (CFU/mL)
+							th Acceptable
+					tbody
+						- var i = 0
+						- var ij = i+j;
+						while i < 20 && ij < asset.micro.hcc.length
+							- var re = asset.micro.hcc[ij];
+							tr
+								td
+									span #{re.date}
+								td
+									span #{re.scid}
+								td(style='text-align: right;width: 20%;')
+									span #{re.result}
+								td(style='width: 15%;')
+									span #{re.acceptable}
+							- i++;
+							- ij = i+j;
+						- j = ij;
+				div(class='page-footer')
+					div(class='foo-left')
+						| Water treatment review
+					div(class='foo-middle')
+						= 'Issued ' + location.issued
+					div(class='foo-right')
+						= 'Page ' + pageCount + ' of ' + reportTotal						
+			div(class='page-break')
+			- pageCount++;
+			- h++;		
+	if asset.coupons.length > 0
+		div( class='page')
+			div( class='page-logo')
+				img( src='#{location.logo}' )
+			div(class='page-organization')
+				div()
+					div(class='page-org')
+						= location.organization
+					div
+						= location.name
+					div
+						= location.from + ' - ' + location.to
+			each tb in asset.coupons
+				div(class='subtitle')
+					= tb.data[0].Coupon_Type_Description + ' Corrosion Coupons'
+				table(class='table green')
+					thead
+						th Date In
+						th Weight In (g)
+						th Date Out
+						th Weight Out (g)
+						th Corrosion Rate (mpy)
+						th Acceptable
+					each cp in tb.data
+						tr
+							td= cp.Date_In
+							td(style='text-align: right;')= cp.Weight_In
+							td= cp.Date_Out
+							td(style='text-align: right;')= cp.Weight_Out
+							td(style='text-align: right;')= cp.Corrosion_Calculated
+							td= cp.acceptable
+				br
+			div(class='page-footer')
+				div(class='foo-left')
+					| Water treatment review
+				div(class='foo-middle')
+					= 'Issued ' + location.issued
+				div(class='foo-right')
+					= 'Page ' + pageCount + ' of ' + reportTotal
+		div(class='page-break')
+		- pageCount++
+	script(type='text/javascript').
+		$(function () {
+				var series = !{JSON.stringify(asset.series)};
+				var colors = ['#346BA7', '#009387', '#EC5E64', '#F37649', '#A8BC58', '#00B9D1', '#C253CE'];
+				var to = '#{location.to}';
+				var from = '#{location.from}';
+				$('#container#{asIndex}').highcharts({
+					title: {
+						text: ''
+					},
+					chart: {
+							type: 'line',
+							animation: false
+				},
+				plotOptions: {
+					series: {
+						animation: false,
+						lineWidth: 1
+					}
+				},
+				legend: {
+					itemStyle: {
+						fontSize: '10px'
+					}
+				},
+				plotBackgroundColor: '#E0E0E0',
+				colors: colors,
+				xAxis: {
+					type: 'datetime',
+					max: new Date(to).getTime(),
+					min: new Date(from).getTime(),
+					alternateGridColor: 'WhiteSmoke',
+					labels: {
+						style:{
+							fontSize: '10px'
+						}
+					},
+					dateTimeLabelFormats: {
+						millisecond: '%b %Y',
+						second: '%b %Y',
+						minute: '%b %Y',
+						hour: '%b %Y',
+						week: '%b %Y',
+						month: '%b %Y',
+						year: '%b %Y',
+						day: '%b %Y'
+					}
+				},
+				yAxis: {
+					labels: {
+						style:{
+							fontSize: '10px'
+						}
+					},
+					min: -2.5,
+					max: 2.5,
+					gridLineWidth: 0,
+					plotLines: [{
+						color: '#000000',
+						dashStyle: 'Dash',
+						value: 0,
+						width: 1
+					}, {
+						color: '#000000',
+						value: 1,
+						width: 1
+					}, {
+						color: '#ACACAC',
+						value: -1,
+						width: 1
+					}],
+						plotOptions: {
+						series: {
+							lineWidth: 1
+						}
+					},
+					title: {
+						text: ''
+					}
+				},
+				credits: {
+					enabled: false
+				},
+				series: series
+			});
+		})();	
+if location.reports.length > 0
+	div(class='page')
+		div(class='page-logo')
+			img( src='#{location.logo}' )
+		div( class='page-organization' )
+			div
+				div(class='page-org')
+					= location.organization
+				div
+					= location.name
+				div
+					= location.from + ' - ' + location.to
+		div(class='asset-name')
+			= ( location.assets.length + staticPages )  + '. REPORT NOTES'
+		table(class='table')
+			thead
+				th(style='width: 15%;') Date
+				th Service Call ID
+				th Technician
+			- for row in location.reports[0]
+				tr
+					td(class='crimson', colspan='3') 
+						b
+							= row.reportName
+				tr
+					td= row.AttendanceDate
+					td= row.ServiceCall
+					td= row.techName
+				tr
+					td 
+						b
+							| Comment
+					td(colspan='2')= row.Comments
+		div(class='page-footer')
+			div(class='foo-left')
+				| Water treatment review
+			div(class='foo-middle')
+				= 'Issued ' + location.issued
+			div(class='foo-right')
+				= 'Page ' + pageCount + ' of ' + reportTotal
+	div(class='page-break')
+	- pageCount++
+- r = 1
+while r < location.reports.length
+	div(class='page')
+		div(class='page-logo')
+			img( src='#{location.logo}' )
+		div( class='page-organization' )
+			div
+				div(class='page-org')
+					= location.organization
+				div
+					= location.name
+				div
+					= location.from + ' - ' + location.to
+		table(class='table')
+			thead
+				th(style='width: 15%;') Date
+				th Service Call ID
+				th Technician
+			- for row in location.reports[r]
+				tr
+					td(class='crimson', colspan='3')
+						b
+							= row.reportName
+				tr
+					td= row.AttendanceDate
+					td= row.ServiceCall
+					td= row.techName
+				tr
+					td 
+						b
+							| Comment
+					td(colspan='2')= row.Comments
+		if r == location.reports.length - 1
+			div(class='subtitle')
+				| Contact Us
+			p
+				| At HydroChem we're recognised as the clear market leader in Australia's water treatment industry. Our mission is simple: to bring world-class water treatment products and services to clients across Australia. Please contact your account manager for any queries
+		div(class='page-footer')
+			div(class='foo-left')
+				| Water treatment review
+			div(class='foo-middle')
+				= 'Issued ' + location.issued
+			div(class='foo-right')
+				= 'Page ' + pageCount + ' of ' + reportTotal
+	div(class='page-break')
+	- pageCount++
+	- r++

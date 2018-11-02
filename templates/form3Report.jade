@@ -1,0 +1,334 @@
+link(rel='stylesheet', href='#{location.font}')
+link(rel='stylesheet', href='#{location.css}')
+- var pageCount = 2;
+- var firstAsset = location.assets.length > 0 ? location.assets[0] : {};
+- var extraPages = 0;
+div( class='main-logo')
+	img( src='#{location.logo}' )
+div( class='main-img')
+	img( src='#{location.firstPage}' )
+div( class='main-footer' )
+	div(class='main-bg')
+		div(class='main-title')
+			| Microbiological Results Summary by Laxman
+		div(class='organization-name')
+			= location.organization
+		div(class='location-name')
+			= location.name
+		div(class='main-dates')
+			= location.from + ' - ' + location.to
+		div(class='issued')
+			= 'Issued ' + location.issued
+	div(class='over')
+		| Over 35 years of excellence
+	div(class='phone')
+		| 1300 558 788
+		span(class='phone-spacing')
+		| hydrochem.com.au
+div(class='page-break')
+div(class='page')
+	div(class='page-logo')
+		img( src='#{location.logo}' )
+	div( class='first-title' )
+		div
+			div(class='organization')
+				= location.organization
+			div(class='title-location')
+				= location.name
+			div(class='title-dates')
+				= location.from + ' - ' + location.to
+		| This report summarises all Legionella and HCC results for 
+		b
+			= ' ' + location.name + ' ' 
+		| between
+		b
+			= ' ' + location.from + ' '
+		| and
+		b
+			= ' ' + location.to
+	div
+	if location.assets.length > 0
+		div(class='asset-name')
+			= '1. ' + location.assets[0].assetName
+		div( class='subtitle' )
+			| Legionella Species Report:
+		table(class='table blue')
+			thead
+				tr
+					th Date
+					th Service Call ID
+					th Result (CFU/mL)
+					th Acceptable
+			tbody
+				- for ( var j=0; j<firstAsset.leg.length && j<9; j++)
+					- var re = firstAsset.leg[j]
+					tr
+						td
+							span #{re.date}
+						td
+							span #{re.scid}
+						td(style='text-align: right;width: 20%;')
+							span #{re.val}
+						td(style='width: 15%;')
+							span #{re.acceptable}
+		div(class='page-footer')
+			div(class='foo-left')
+				| Microbiological Results Summary
+			div(class='foo-middle')
+				= 'Issued ' + location.issued
+			div(class='foo-right')
+				= 'Page ' + pageCount + ' of ' + location.totalPages
+div(class='page-break')
+- pageCount++;
+if firstAsset.leg && firstAsset.leg.length > 9
+	- var fLegPages = firstAsset.leg.length > 0 ? Math.ceil((firstAsset.leg.length-9)/20) : 0;
+	- var k = 0;
+	- var j = 9;
+	while k < fLegPages
+		div(class='page')
+
+			div(class='page-logo')
+				img( src='#{location.logo}' )
+			div( class='page-organization' )
+				div
+					div(class='page-org')
+						= location.organization
+					div
+						= location.name
+					div
+						= location.from + ' - ' + location.to				
+			table(class='table blue')
+				thead
+					tr
+						th Date
+						th Service Call ID
+						th Result (CFU/mL)
+						th Acceptable
+				tbody
+					- var i = 0;
+					- var ij = i+j;
+					while i < 20 && ij < firstAsset.leg.length
+						- var re = firstAsset.leg[ij];
+						tr
+							td
+								span #{re.date}
+							td
+								span #{re.scid}
+							td(style='text-align: right;width: 20%;')
+								span #{re.val}
+							td(style='width: 15%;')
+								span #{re.acceptable}
+						- i++;
+						- ij = i+j;
+					- j = ij;
+			div(class='page-footer')
+				div(class='foo-left')
+					| Microbiological Results Summary
+				div(class='foo-middle')
+					= 'Issued ' + location.issued
+				div(class='foo-right')
+					= 'Page ' + pageCount + ' of ' + location.totalPages
+		div(class='page-break')
+		- pageCount++;
+		- k++;
+if firstAsset.hcc && firstAsset.hcc.length > 0
+	- var fHccPages = firstAsset.hcc.length > 0 ? Math.ceil(firstAsset.hcc.length/20) : 0;
+	- var k = 0;
+	- var j = 0;
+	while k < fHccPages
+		div(class='page')
+
+			div(class='page-logo')
+				img( src='#{location.logo}' )
+			div( class='page-organization' )
+				div
+					div(class='page-org')
+						= location.organization
+					div
+						= location.name
+					div
+						= location.from + ' - ' + location.to
+			if k === 0
+				div(class='asset-name')
+					= '1. ' + firstAsset.assetName
+				div( class='subtitle' )
+					| Heterotrophic Colony Count Report:						
+			table(class='table blue')
+				thead
+					tr
+						th Date
+						th Service Call ID
+						th Result (CFU/mL)
+						th Acceptable
+				tbody
+					- var i = 0;
+					- var ij = i+j;
+					while i < 20 && ij < firstAsset.hcc.length
+						- var re = firstAsset.hcc[ij];
+						tr
+							td
+								span #{re.date}
+							td
+								span #{re.scid}
+							td(style='text-align: right;width: 20%;')
+								span #{re.val}
+							td(style='width: 15%;')
+								span #{re.acceptable}
+						- i++;
+						- ij = i+j;
+					- j = ij;
+			div(class='page-footer')
+				div(class='foo-left')
+					| Microbiological Results Summary
+				div(class='foo-middle')
+					= 'Issued ' + location.issued
+				div(class='foo-right')
+					= 'Page ' + pageCount + ' of ' + location.totalPages
+		div(class='page-break')
+		- pageCount++;
+		- k++;
+- location.assets.shift();
+for asset, index in location.assets
+	- var legPages = asset.leg.length > 0 ? Math.ceil(asset.leg.length/20) : 0;
+	- var hccPages = asset.hcc.length > 0 ? Math.ceil(asset.hcc.length/20) : 0;
+	- var h = 0;
+	- var j = 0;
+	while h < legPages
+		div(class='page')
+			div(class='page-logo')
+				img( src='#{location.logo}' )
+			div( class='page-organization' )
+				div
+					div(class='page-org')
+						= location.organization
+					div
+						= location.name
+					div
+						= location.from + ' - ' + location.to
+			if h === 0
+				div(class='asset-name')
+					= ( index + 2 ) + '. ' + asset.assetName
+				div( class='subtitle' )
+					| Legionella Species Report:
+			table(class='table blue')
+				thead
+					tr
+						th Date
+						th Service Call ID
+						th Result (CFU/mL)
+						th Acceptable
+				tbody
+					- var i = 0
+					- var ij = i+j;
+					while i < 20 && ij < asset.leg.length
+						- var re = asset.leg[ij];
+						tr
+							td
+								span #{re.date}
+							td
+								span #{re.scid}
+							td(style='text-align: right;width: 20%;')
+								span #{re.val}
+							td(style='width: 15%;')
+								span #{re.acceptable}
+						- i++;
+						- ij = i+j;
+					- j = ij;
+			div(class='page-footer')
+				div(class='foo-left')
+					| Microbiological Results Summary
+				div(class='foo-middle')
+					= 'Issued ' + location.issued
+				div(class='foo-right')
+					= 'Page ' + pageCount + ' of ' + location.totalPages
+		div(class='page-break')
+		- pageCount++;
+		- h++;
+	- h = 0;
+	- j = 0;
+	while h < hccPages
+		div(class='page')
+			div(class='page-logo')
+				img( src='#{location.logo}' )
+			div( class='page-organization' )
+				div
+					div(class='page-org')
+						= location.organization
+					div
+						= location.name
+					div
+						= location.from + ' - ' + location.to
+			if h === 0
+				div(class='asset-name')
+					= ( index + 2 ) + '. ' + asset.assetName
+				div( class='subtitle' )
+					| Heterotrophic Colony Count Report:
+			table(class='table blue')
+				thead
+					tr
+						th Date
+						th Service Call ID
+						th Result (CFU/mL)
+						th Acceptable
+				tbody
+					- var i = 0
+					- var ij = i+j;
+					while i < 20 && ij < asset.hcc.length
+						- var re = asset.hcc[ij];
+						tr
+							td
+								span #{re.date}
+							td
+								span #{re.scid}
+							td(style='text-align: right;width: 20%;')
+								span #{re.val}
+							td(style='width: 15%;')
+								span #{re.acceptable}
+						- i++;
+						- ij = i+j;
+					- j = ij;
+			div(class='page-footer')
+				div(class='foo-left')
+					| Microbiological Results Summary
+				div(class='foo-middle')
+					= 'Issued ' + location.issued
+				div(class='foo-right')
+					= 'Page ' + pageCount + ' of ' + location.totalPages
+		div(class='page-break')
+		- pageCount++;
+		- h++;		
+div(class='page')
+	div(class='page-logo')
+		img( src='#{location.logo}' )
+	div( class='page-organization' )
+		div
+			div(class='page-org')
+				= location.organization
+			div
+				= location.name
+			div
+				= location.from + ' - ' + location.to
+	div(class='asset-name')
+		| #{location.asLength}
+		= '. WHAT DO MY RESULTS MEAN?'
+	div(class='subtitle')
+		| Legionella Species Report:
+	p
+		| A zero result indicates less than 10 organisms per 1 millilitre (AS/NZS 3896). Results were estimated after an incubation period of 7 days at 36C+/-1C. Sampled using procedures certified to ISO 9001 (Reg No 6465). Analyses carried out using procedures to AS3896. All samples were tested by a NATA Registered Laboratory
+	div(class='subtitle')
+		| Heterotrophic Colony Count Report:
+	p
+		| HCC Result is useful in assessing the efficacy of biocidal treatment and state of microbiological control of organisms in the system. It is not a measurement of Legionella and does not reflect the physical condition of the cooling water.
+	p
+		| Results are reported as colony forming units in 1 millilitre of sample. Samples incubated for 48 hours at 36C+/-1C as per AS4276.3.1/2. All samples were tested by a NATA Registered Laboratory
+	div(class='subtitle')
+		| Contact Us
+	p
+		| At HydroChem we're recognised as the clear market leader in Australia's water treatment industry. Our mission is simple: to bring world-class water treatment products and services to clients across Australia. Please contact your account manager for any queries.
+	div(class='page-footer')
+		div(class='foo-left')
+			| Microbiological Results Summary
+		div(class='foo-middle')
+			= 'Issued ' + location.issued
+		div(class='foo-right')
+			= 'Page ' + pageCount + ' of ' + location.totalPages
